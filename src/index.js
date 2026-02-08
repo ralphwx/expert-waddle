@@ -1,17 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import ReactDOM from "react-dom/client";
+import EventListingPage from "./eventPage.js";
+import "./index.css";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
+const events = [ 
+  {             
+    name: "AI Meetup",
+    organizer: "Tech Group",
+    date: "2026-03-10",
+    time: "18:00",
+    location: "New York",
+    type: "Meetup",
+    description: "A meetup about AI trends",
+    link: "https://example.com/ai-meetup",
+  },            
+];     
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+function Main() {
+    return <EventListingPage events={events} />
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Main />);
