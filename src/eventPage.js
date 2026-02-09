@@ -1,25 +1,26 @@
 import { useMemo, useState } from "react";
+import {events, event_types, organizers} from "./content.js";
+
+function listIntersection(l1, l2) {
+    let output = [];
+    for(let e of l1) {
+        if(l2.includes(e)) output.push(e);
+    }
+    return output;
+}
 
 export default function EventListingPage({events}) {
   const [selectedOrganizers, setSelectedOrganizers] = useState([]);
   const [selectedTypes, setSelectedTypes] = useState([]);
   const [selectedDate, setSelectedDate] = useState("");
 
-  const organizers = useMemo(
-    () => Array.from(new Set(events.map((e) => e.organizer))),
-    []
-  );
-
-  const types = useMemo(
-    () => Array.from(new Set(events.map((e) => e.type))),
-    []
-  );
+  const types = event_types;
 
   const filteredEvents = useMemo(() => {
     return events.filter((event) => {
       const organizerMatch =
         selectedOrganizers.length === 0 ||
-        selectedOrganizers.includes(event.organizer);
+        listIntersection(selectedOrganizers, event.organizers).length > 0;
 
       const typeMatch =
         selectedTypes.length === 0 || selectedTypes.includes(event.type);
@@ -119,29 +120,35 @@ export default function EventListingPage({events}) {
             <p className="text-gray-500">No events match your filters.</p>
           )}
 
-          {filteredEvents.map((event, idx) => (
-            <div
+          {filteredEvents.map((event, idx) => {
+            console.log(event);
+            console.log(event.organizers);
+            console.log(event.links);
+            return <div
               key={idx}
               className="border rounded-xl p-4 shadow-sm space-y-2"
             >
               <h3 className="text-xl font-semibold">{event.name}</h3>
               <p className="text-sm text-gray-600">
-                {event.organizer} • {event.type}
+                {event.organizers.join(", ")} • {event.type}
               </p>
               <p className="text-sm">
                 {event.date} at {event.time} — {event.location}
               </p>
               <p>{event.description}</p>
-              <a
-                href={event.link}
-                target="_blank"
-                rel="noreferrer"
-                className="text-blue-600 underline"
-              >
-                View Event
-              </a>
+              <p>References</p>
+              {event.links.map((link) => {
+                  return <a
+                    href={link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    {link}
+                  </a>
+              })}
             </div>
-          ))}
+          })}
         </main>
       </div>
     </div>
