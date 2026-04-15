@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import {events, event_types, organizers} from "./content.js";
+import {event_types, organizers} from "./content.js";
 
 function listIntersection(l1, l2) {
     let output = [];
